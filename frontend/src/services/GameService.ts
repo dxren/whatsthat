@@ -1,7 +1,12 @@
-import { Board } from "../../../shared/types";
+import { Board, GameState } from "../../../shared/types";
+
+interface MoveResult {
+    board: Board;
+    gameState: GameState;
+};
 
 interface IGameService {
-    makeMove: (game: Board, position: number, tile: 'x' | 'o', rulesetId: string) => Promise<Board>;
+    makeMove: (game: Board, position: number, tile: 'x' | 'o', rulesetId: string) => Promise<MoveResult>;
     getDailyRuleset: () => Promise<string>;
 }
 

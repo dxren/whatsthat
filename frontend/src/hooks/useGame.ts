@@ -1,15 +1,8 @@
 import { useState } from "react";
-import { Board } from "../../../shared/types";
+import { Board, GameState } from "../../../shared/types";
 import GameService from "../services/gameService";
 
 const gameService = GameService();
-
-enum GameState {
-    XWin,
-    OWin,
-    Tie,
-    InProgress,
-};
 
 type GameHook = () => {
     game: Board;
@@ -27,8 +20,9 @@ const useGame: GameHook = () => {
     const [gameState, setGameState] = useState<GameState>(GameState.InProgress);
 
     const makeMove = async (position: number, tile: 'x' | 'o', rulesetId: string) => {
-        const newBoard: Board = await gameService.makeMove(game, position, tile, rulesetId);
+        const {board: newBoard, gameState} = await gameService.makeMove(game, position, tile, rulesetId);
         setGame(newBoard);
+        setGameState(gameState);
     };
 
     const getDailyRuleset = async () => {
