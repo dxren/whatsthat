@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
 import useGame from "./hooks/useGame";
 import "./App.css";
+import { Board } from "../../shared/types";
 
 const App: React.FC = () => {
   const { game, makeMove, getDailyRuleset, currentPlayer } = useGame();
   const [rulesetId, setRulesetId] = useState<string>("");
-  const [history, setHistory] = useState<("x" | "o" | null)[][]>([]);
+  const [history] = useState<Board[]>([]);
 
   useEffect(() => {
     (async () => {
@@ -24,7 +25,7 @@ const App: React.FC = () => {
       <div className="flex flex-col items-center justify-center w-2/3 m-7">
         <h1 className="text-white text-4xl font-bold mb-6">Let's Play!</h1>
         <div
-          className="grid grid-cols-3 gap-1 bg-gray-300 bg-opacity-20 border border-white"
+          className="grid grid-cols-3 grid-rows-3 gap-1 bg-gray-300 bg-opacity-20 border border-white"
           style={{ width: "500px", height: "500px" }}
         >
           {game.map((value: "x" | "o" | null, index: number) => (
