@@ -3,10 +3,11 @@ import { Board, GameState } from "../../../shared/types";
 interface MoveResult {
     board: Board;
     gameState: GameState;
+    currentPlayer: 'x' | 'o';
 };
 
 interface IGameService {
-    makeMove: (game: Board, position: number, tile: 'x' | 'o', rulesetId: string) => Promise<MoveResult>;
+    makeMove: (game: Board, position: number, tile: 'x' | 'o', rulesetId: string) => Promise<MoveResult | null>;
     getDailyRuleset: () => Promise<string>;
 }
 
@@ -20,7 +21,10 @@ const GameService: () => IGameService = () => ({
             },
             body: JSON.stringify({ game, position, tile }),
         });
-        return response.json();
+        if (response.ok) {
+            return response.json();
+        }
+        return null;
     },
     getDailyRuleset: async () => {
         const url = endpoints.getDailyRuleset;

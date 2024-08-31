@@ -1,10 +1,18 @@
-import React from "react";
+import React, { useEffect } from "react";
 import useGame from "./hooks/useGame";
 import { useState } from 'react'
 import './App.css'
 
 const App: React.FC = () => {
-  const { game, makeMove, currentPlayer, gameState } = useGame();
+  const { game, makeMove, getDailyRuleset, currentPlayer } = useGame();
+  const [rulesetId, setRulesetId] = useState<string>('');
+
+  useEffect(() => {
+    (async () => {{
+        const rulesetId = await getDailyRuleset();
+        setRulesetId(rulesetId);
+    }})();
+  }, []);
 
   return (
     <div className="flex flex-row min-h-screen bg-black p-8">
@@ -18,7 +26,7 @@ const App: React.FC = () => {
           {game.map((value: "x" | "o" | null, index: number) => (
             <div
               key={index}
-              onClick={() => makeMove(index)}
+              onClick={() => makeMove(index, currentPlayer, rulesetId)}
               className="flex items-center justify-center w-full h-full bg-gray-300 border border-white text-4xl font-bold text-white cursor-pointer"
             >
               {value?.toUpperCase()}
