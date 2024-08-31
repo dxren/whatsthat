@@ -1,14 +1,20 @@
 import { Board, GameState } from "../../../shared/types";
+import { ENDPOINTS } from "./endpoints";
 
 interface MoveResult {
-    board: Board;
-    gameState: GameState;
-    currentPlayer: 'x' | 'o';
-};
+  board: Board;
+  gameState: GameState;
+  currentPlayer: "x" | "o";
+}
 
 interface IGameService {
-    makeMove: (game: Board, position: number, tile: 'x' | 'o', rulesetId: string) => Promise<MoveResult | null>;
-    getDailyRuleset: () => Promise<string>;
+  makeMove: (
+    game: Board,
+    position: number,
+    tile: "x" | "o",
+    rulesetId: string
+  ) => Promise<MoveResult | null>;
+  getDailyRuleset: () => Promise<string>;
 }
 
 // const GameService: () => IGameService = () => ({
@@ -34,8 +40,7 @@ interface IGameService {
 // });
 
 const GameService: () => IGameService = () => ({
-    makeMove: async (game, position, tile, rulesetId) => {
-        rulesetId;
+    makeMove: async (game, position, tile, _rulesetId) => {
         const board = [...game.slice(0, position), tile, ...game.slice(position + 1)];
         const gameState = calculateGameState(board);
         const currentPlayer = tile === 'x' ? 'o' : 'x';
@@ -46,8 +51,10 @@ const GameService: () => IGameService = () => ({
         };
     },
     getDailyRuleset: async () => {
-        return '123';
-    }
+        const url = ENDPOINTS.GET_RULE;
+        const response = await fetch(url);
+        return response.json();
+    },
 });
 
 const calculateGameState = (board: Board): GameState => {
