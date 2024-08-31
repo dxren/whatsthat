@@ -3,7 +3,8 @@
   "module": "index.ts",
   "type": "module",
   "devDependencies": {
-    "@types/bun": "latest"
+    "@types/bun": "latest",
+    "ts-node": "^10.9.2"
   },
   "peerDependencies": {
     "typescript": "^5.0.0"
@@ -11,5 +12,8 @@
   "dependencies": {
     "@types/express": "^4.17.21",
     "express": "^4.19.2"
+  },
+  "scripts": {
+    "start": "ts-node -r tsconfig-paths/register src/server.ts"
   }
 }
