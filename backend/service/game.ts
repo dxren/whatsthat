@@ -1,7 +1,9 @@
 import { Router } from "express";
 import { Board, GameState, PostMoveResponse, Tile } from "../../shared/types";
 import handleMove from "../utils/handleMove";
+import fs from "node:fs";
 
+const RULE_FILE = "./current-rule.txt";
 export interface IGameService {
   postMove(
     game: Board,
@@ -18,7 +20,7 @@ export const GameService: () => IGameService = () => ({
     return result;
   },
   getDailyRule: () => {
-    return { rulesetId: `any-id` };
+    return { rulesetId: fs.readFileSync(RULE_FILE, "utf8") };
   },
 });
 
