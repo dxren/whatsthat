@@ -13,7 +13,7 @@ const App: React.FC = () => {
       const rulesetId = await getDailyRuleset();
       setRulesetId(rulesetId);
     })();
-  }, [getDailyRuleset]);
+  }, []);
 
   // This will add 8 blank games if there are no games in history
   const historyToDisplay =
