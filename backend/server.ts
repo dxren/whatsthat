@@ -14,11 +14,8 @@ app.get("/", (req, res) => {
 });
 
 app.get("/daily", (req, res) => {
-    const rulesetId = process.env.DAILY_RULE_ID;
-    if (!rulesetId) {
-        res.status(500).json({ error: "No daily ruleset id set" });
-        return;
-    }
+    const gameService = GameService();
+    const { rulesetId } = gameService.getDailyRule();
     const result: GetDailyRulesetResponse = {
         rulesetId
     }
