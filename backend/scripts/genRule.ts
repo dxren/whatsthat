@@ -14,3 +14,4 @@ await Promise.all([
   fs.promises.writeFile(`${OUT_DIR}/${id}.ts`, rule.fileContent),
   fs.promises.writeFile(RULE_FILE, id),
 ]);
+console.log("New rule generated:", id);
