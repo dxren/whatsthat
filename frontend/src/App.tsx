@@ -2,10 +2,13 @@ import React, { useEffect, useState } from "react";
 import useGame from "./hooks/useGame";
 import "./App.css";
 import { History } from "./components/History";
+// import { Board } from "../../shared/types";
 
 const App: React.FC = () => {
   const { game, makeMove, getDailyRuleset, currentPlayer } = useGame();
-  const [rulesetId, setRulesetId] = useState<string>("");
+
+  const [rulesetId, setRulesetId] = useState<string | null>(null);
+  // const [history] = useState<Board[]>([]);
 
   useEffect(() => {
     (async () => {
@@ -28,12 +31,14 @@ const App: React.FC = () => {
           {game.map((value: "x" | "o" | null, index: number) => (
             <div
               key={index}
-              onClick={() => makeMove(index, currentPlayer, rulesetId)}
+
+              onClick={() => { if (rulesetId) makeMove(index, currentPlayer, rulesetId) }}
               style={{
                 background: "linear-gradient(to right, #F63331 15%, #594368 55% ) fixed",
               }}
               className="flex items-center justify-center w-full h-full border border-white text-2xl md:text-4xl font-bold text-[#F3E0EF] cursor-pointer rounded-md bg-fixed"
             >
+
               {value?.toUpperCase()}
             </div>
           ))}
@@ -53,3 +58,4 @@ const App: React.FC = () => {
 };
 
 export default App;
+

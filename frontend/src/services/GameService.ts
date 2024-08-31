@@ -1,11 +1,5 @@
-import { Board, GameState } from "../../../shared/types";
+import { Board, GetDailyRulesetResponseSchema, PostMoveBody, PostMoveResponse, PostMoveResponseSchema } from "../../../shared/types";
 import { ENDPOINTS } from "./endpoints";
-
-interface MoveResult {
-  game: Board;
-  gameState: GameState;
-  currentPlayer: "x" | "o";
-}
 
 interface IGameService {
   makeMove: (
@@ -13,29 +7,41 @@ interface IGameService {
     position: number,
     tile: "x" | "o",
     rulesetId: string
-  ) => Promise<MoveResult | null>;
-  getDailyRuleset: () => Promise<string>;
+  ) => Promise<PostMoveResponse | null>;
+  getDailyRuleset: () => Promise<string | null>;
 }
 
 const GameService: () => IGameService = () => ({
-    makeMove: async (game, position, tile, rulesetId) => {
+    makeMove: async (game, position, currentPlayer, rulesetId) => {
         const url = ENDPOINTS.POST_MOVE(rulesetId);
+        const body: PostMoveBody = {
+            game,
+            position,
+            currentPlayer,
+        };
+
         const response = await fetch(url, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ game, position, tile }),
+            body: JSON.stringify(body),
         });
+
         if (response.ok) {
-            return response.json();
+            const result = PostMoveResponseSchema.parse(await response.json());
+            return result;
         }
         return null;
     },
     getDailyRuleset: async () => {
         const url = ENDPOINTS.GET_RULE;
         const response = await fetch(url);
-        return response.json();
+        if (response.ok) {
+            const result = GetDailyRulesetResponseSchema.parse(await response.json());
+            return result.rulesetId;
+        }
+        return null;
     }
 });
 

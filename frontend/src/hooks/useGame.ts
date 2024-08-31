@@ -6,8 +6,8 @@ const gameService = GameService();
 
 type GameHook = () => {
     game: Board;
-    makeMove: (position: number, tile: 'x' | 'o', rulesetId: string) => void;
-    getDailyRuleset: () => Promise<string>;
+    makeMove: (position: number, tile: 'x' | 'o', rulesetId: string) => Promise<Board | null>;
+    getDailyRuleset: () => Promise<string | null>;
     gameState: GameState;
     currentPlayer: 'x' | 'o';
 };
@@ -28,11 +28,13 @@ const useGame: GameHook = () => {
             setGame(result.game);
             setGameState(result.gameState);
             setCurrentPlayer(result.currentPlayer);
+            return result.game;
         }
+        return null;
     };
 
     const getDailyRuleset = async () => {
-        const ruleset: string = await gameService.getDailyRuleset();
+        const ruleset = await gameService.getDailyRuleset();
         return ruleset;
     };
 

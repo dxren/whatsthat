@@ -3,6 +3,8 @@ import cors from "cors";
 import { GameService } from "./service/game";
 const app = express();
 const PORT = 4040;
+import {validateRequestBody} from 'zod-express-middleware';
+import { GetDailyRulesetResponse, PostMoveBodySchema } from "../shared/types";
 
 app.use(express.json());
 app.use(cors());
@@ -12,15 +14,23 @@ app.get("/", (req, res) => {
 });
 
 app.get("/daily", (req, res) => {
-  res.json({ rulesetId: "any-id" });
+    const rulesetId = process.env.DAILY_RULE_ID;
+    if (!rulesetId) {
+        res.status(500).json({ error: "No daily ruleset id set" });
+        return;
+    }
+    const result: GetDailyRulesetResponse = {
+        rulesetId
+    }
+    res.json(result);
 });
 
-app.post("/:rulesetId", (req, res) => {
-  const { game, position, tile } = req.body;
+app.post("/:rulesetId", validateRequestBody(PostMoveBodySchema), async (req, res) => {
+  const { game, position, currentPlayer } = req.body;
   const { rulesetId } = req.params;
 
   const gameService = GameService();
-  const result = gameService.postMove(game, position, tile);
+  const result = await gameService.postMove(game, position, currentPlayer, rulesetId);
 
   if (result) {
     res.json(result);
