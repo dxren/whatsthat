@@ -23,7 +23,9 @@ const GameService: () => IGameService = () => ({
         return response.json();
     },
     getDailyRuleset: async () => {
-        return '';
+        const url = endpoints.getDailyRuleset;
+        const response = await fetch(url);
+        return response.json();
     }
 });
 
