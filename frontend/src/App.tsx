@@ -1,5 +1,7 @@
 import React from "react";
 import useGame from "./hooks/useGame";
+import { useState } from 'react'
+import './App.css'
 
 const App: React.FC = () => {
   const { game, makeMove, currentPlayer, gameState } = useGame();
