@@ -5,7 +5,7 @@ import { Board } from "../../shared/types";
 
 const App: React.FC = () => {
   const { game, makeMove, getDailyRuleset, currentPlayer } = useGame();
-  const [rulesetId, setRulesetId] = useState<string>("");
+  const [rulesetId, setRulesetId] = useState<string | null>(null);
   const [history] = useState<Board[]>([]);
 
   useEffect(() => {
@@ -31,7 +31,7 @@ const App: React.FC = () => {
           {game.map((value: "x" | "o" | null, index: number) => (
             <div
               key={index}
-              onClick={() => makeMove(index, currentPlayer, rulesetId)}
+              onClick={() => {if (rulesetId) makeMove(index, currentPlayer, rulesetId)}}
               className="flex items-center justify-center w-full h-full bg-gray-300 border border-white text-4xl font-bold text-white cursor-pointer"
             >
               {value?.toUpperCase()}
